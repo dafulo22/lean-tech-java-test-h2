@@ -85,4 +85,17 @@ class EmployeeServiceImplTest {
 
         Assertions.assertEquals(exception.getMessage(), EMPLOYEE_NOT_FOUND + ID_NON_EXISTENT);
     }
+
+    @Test
+    @DisplayName("findById test error, failed")
+    void shouldThrowExceptionFailed() {
+        Mockito.doThrow(new StopFlowExecutionException(EMPLOYEE_NOT_FOUND + ID_NON_EXISTENT))
+            .when(this.employeeRepository).findById(ID_NON_EXISTENT);
+
+        Throwable exception = Assertions.assertThrows(StopFlowExecutionException.class, () -> {
+            this.employeeService.findById(ID_NON_EXISTENT);
+        });
+
+        Assertions.assertEquals(exception.getMessage(), "ERROR");
+    }
 }
